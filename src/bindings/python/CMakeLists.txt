@@ -49,13 +49,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PYTHON_INCLUDE_PATH}")
 link_libraries(${PYTHON_LDFLAGS})
 
 # Add swig module
-swig_add_module(PyCodec python ../codec.py.i)
+swig_add_library(PyCodec
+  LANGUAGE python
+  SOURCES ../codec.py.i)
 swig_link_libraries(PyCodec
   codec fields
   lsecodec oslocodec turquoisecodec jsecodec borsacodec
   swxcodec
   ${PYTHON_LIBS})
-set_target_properties(_PyCodec PROPERTIES OUTPUT_NAME "_codec")
+set_target_properties(${SWIG_MODULE_PyCodec_REAL_NAME} PROPERTIES OUTPUT_NAME "_codec")
 
 # Files to install with Python
 set(PYTHON_INSTALL_FILES
@@ -63,7 +65,7 @@ set(PYTHON_INSTALL_FILES
   ${CMAKE_CURRENT_BINARY_DIR}/codec.py)
 
 # Declare install target for pytho
-install(TARGETS _PyCodec
+install(TARGETS ${SWIG_MODULE_PyCodec_REAL_NAME}
   DESTINATION lib/python)
 install(FILES ${PYTHON_INSTALL_FILES}
   DESTINATION lib/python)
